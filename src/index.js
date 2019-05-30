@@ -1,8 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import 'normalize.css';
 import './index.css';
-import { App } from './components/App';
 import * as serviceWorker from './serviceWorker';
+import { AuthProvider } from './contexts/AuthContext';
+import { Routes } from './Routes';
+
+const App = () => {
+  return (
+    <AuthProvider>
+      <Routes />
+    </AuthProvider>
+  );
+};
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
