@@ -8,6 +8,6 @@ export const getToken = async code => {
     },
     body: JSON.stringify({ code }),
   });
-  console.log(response);
-  return await response.json();
+  const json = await response.json();
+  return json.auth_token;
 };

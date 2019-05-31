@@ -1,26 +1,25 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { Link } from '@reach/router';
 import { FiLogIn } from 'react-icons/fi';
 
+import { AuthContext } from '../contexts/AuthContext';
 import css from './Header.module.css';
-import { getLoginUrl } from '../api/auth/getLoginUrl';
 
 export function Header() {
-  const [loggingIn, setLoggingIn] = useState(false);
-
-  const logIn = async () => {
-    setLoggingIn(true);
-    window.location = await getLoginUrl();
-  };
+  const { token, logIn, loggingIn } = useContext(AuthContext);
 
   return (
     <header className={css.container}>
       <h1 className={css.logo}>
         <Link to="/">Spotified</Link>
       </h1>
-      <button onClick={logIn} disabled={loggingIn}>
-        <FiLogIn /> {loggingIn ? 'Logging in' : 'Log in'} with Spotify
-      </button>
+      {token ? (
+        <span>Welcome, {token}</span>
+      ) : (
+        <button onClick={logIn} disabled={loggingIn}>
+          <FiLogIn /> {loggingIn ? 'Logging in' : 'Log in'} with Spotify
+        </button>
+      )}
     </header>
   );
 }

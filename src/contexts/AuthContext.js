@@ -1,17 +1,34 @@
 import React, { useState } from 'react';
 
+import { getLoginUrl } from '../api/auth/getLoginUrl';
+import { getToken } from '../api/auth/getToken';
+
 export const AuthContext = React.createContext({
-  authToken: '',
-  setAuthToken: () => {},
+  token: '',
+  loggingIn: false,
+  logIn: () => {},
+  logInFinish: () => {},
 });
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState('');
+  const [loggingIn, setLoggingIn] = useState(false);
+
   return (
     <AuthContext.Provider
       value={{
-        authToken: token,
-        setAuthToken: token => setToken(token),
+        token,
+        loggingIn,
+        logIn: async () => {
+          setLoggingIn(true);
+          window.location = await getLoginUrl();
+        },
+        logInFinish: async code => {
+          setLoggingIn(true);
+          const token = await getToken(code);
+          setToken(token);
+          setLoggingIn(false);
+        },
       }}
     >
       {children}
