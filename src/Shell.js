@@ -8,16 +8,16 @@ export const Shell = ({ children, location, navigate }) => {
   const auth = useContext(AuthContext);
 
   useEffect(() => {
-    async function fetch() {
+    function finishAuth() {
       setIsFinishing(true);
       const query = new URLSearchParams(location.search);
       const code = query.get('code');
-      await auth.logInFinish(code);
+      auth.logInFinish(code);
       navigate('/');
     }
     const isFinish = location.pathname === '/auth/finish/';
     if (isFinish && !isFinishing) {
-      fetch();
+      finishAuth();
     }
   }, [location, auth, navigate, isFinishing]);
 

@@ -15,7 +15,6 @@ export function PlaylistItem({ playlist }) {
         <FiMusic className={css.countIcon} />
         {playlist.tracks.length}
       </span>
-      <span className={css.owner}>by {playlist.owner.display_name}</span>
       {playlist.tags.length > 0 && (
         <span className={css.tags}>
           <FiTag className={css.tagsIcon} /> {playlist.tags.join(', ')}
@@ -25,7 +24,14 @@ export function PlaylistItem({ playlist }) {
         <ol className={css.tracks}>
           {playlist.tracks.map(track => (
             <li key={track.spotify_id}>
-              {track.name} by {track.artists[0].name}
+              <span role="img" aria-label="Likes">
+                ❤️
+              </span>{' '}
+              {track.votes.ups}{' '}
+              <span role="img" aria-label="Dislikes">
+                😩
+              </span>{' '}
+              {track.votes.downs}
             </li>
           ))}
         </ol>
