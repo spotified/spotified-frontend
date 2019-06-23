@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-import { getPlaylists } from '../api/playlist/getPlaylists';
+import { localApi } from '../api/local';
+import { spotifyApi } from '../api/spotify';
 import { PlaylistItem } from '../components/PlaylistItem';
 
 export function Home() {
@@ -9,7 +10,17 @@ export function Home() {
 
   useEffect(() => {
     async function fetch() {
-      setPlaylists(await getPlaylists());
+      const localPlaylists = await localApi.getPlaylists();
+      const trackIds = localPlaylists.map(playlist =>
+        playlist.tracks.map(track => track.spotify_id)
+      );
+      const requests = trackIds.map(ids => spotifyApi.tracks.getTracks(ids));
+      const tracks = await Promise.all(requests);
+      const playlists = localPlaylists.map((playlist, index) => ({
+        ...playlist,
+        ...tracks[index].track,
+      }));
+      setPlaylists(playlists);
       setLoading(false);
     }
     fetch();

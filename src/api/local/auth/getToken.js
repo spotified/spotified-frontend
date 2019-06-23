@@ -1,7 +1,7 @@
-import { endpoints } from '../api';
+import { baseUrl } from '../config';
 
 export const getToken = async code => {
-  const response = await fetch(endpoints.authFinish, {
+  const response = await fetch(`${baseUrl}/auth/finish/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

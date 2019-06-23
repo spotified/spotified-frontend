@@ -1,35 +1,41 @@
 import React, { useState } from 'react';
 
-import { getLoginUrl } from '../api/auth/getLoginUrl';
-import { getToken } from '../api/auth/getToken';
-import { getCurrentUser } from '../api/spotify/user';
+import { localApi } from '../api/local';
+import { spotifyApi } from '../api/spotify';
+import { setAuthorizationHeaderToken } from '../api/spotify/config';
 
 export const AuthContext = React.createContext({
-  token: '',
+  user: null,
   loggingIn: false,
   logIn: () => {},
   logInFinish: () => {},
 });
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState('');
   const [loggingIn, setLoggingIn] = useState(false);
+  const [user, setUser] = useState(null);
 
   return (
     <AuthContext.Provider
       value={{
-        token,
+        user,
         loggingIn,
         logIn: async () => {
+          console.log('login');
           setLoggingIn(true);
-          window.location = await getLoginUrl();
+          window.location = await localApi.getLoginUrl();
         },
         logInFinish: async code => {
           setLoggingIn(true);
-          const token = await getToken(code);
-          setToken(token);
+          const token = await localApi.getToken(code);
+          setAuthorizationHeaderToken(token);
+          const userData = await spotifyApi.user.getCurrentUser();
           setLoggingIn(false);
-          getCurrentUser(token);
+          setUser({
+            name: userData.display_name,
+            id: userData.id,
+            token,
+          });
         },
       }}
     >
