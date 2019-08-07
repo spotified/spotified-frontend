@@ -21,7 +21,6 @@ export function AuthProvider({ children }) {
         user,
         loggingIn,
         logIn: async () => {
-          console.log('login');
           setLoggingIn(true);
           window.location = await localApi.getLoginUrl();
         },

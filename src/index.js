@@ -5,12 +5,15 @@ import 'normalize.css';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import { AuthProvider } from './contexts/AuthContext';
+import { Shell } from './Shell';
 import { Routes } from './Routes';
 
 const App = () => {
   return (
     <AuthProvider>
-      <Routes />
+      <Shell>
+        <Routes />
+      </Shell>
     </AuthProvider>
   );
 };
