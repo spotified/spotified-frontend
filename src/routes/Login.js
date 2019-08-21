@@ -6,7 +6,6 @@ import { AuthContext } from '../contexts/AuthContext';
 
 export function Login() {
   const { logIn, loggingIn } = useContext(AuthContext);
-  console.log('render login');
   return (
     <div className={css.container}>
       <h1 className={css.title}>

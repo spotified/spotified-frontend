@@ -35,7 +35,8 @@ export function PlaylistItem({ playlist }) {
                   </span>{' '}
                   {track.votes.downs}
                   <p>
-                    {track.name} by {track.artists[0].name}
+                    {track.name} by{' '}
+                    {track.artists.map(artist => artist.name).join(', ')}
                   </p>
                 </li>
               ))}

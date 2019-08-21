@@ -8,7 +8,6 @@ import { AuthFinish } from './routes/AuthFinish';
 
 const PrivateRoute = ({ component: Component, ...props }) => {
   const auth = useContext(AuthContext);
-  console.log(auth.user);
   return auth.user ? (
     <Component {...props} />
   ) : (

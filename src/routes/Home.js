@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { localApi } from '../api/local';
 import { spotifyApi } from '../api/spotify';
+import { mergePlaylistTracks } from '../services/mergePlaylistTracks';
 import { PlaylistItem } from '../components/PlaylistItem';
 
 export function Home() {
@@ -11,15 +12,18 @@ export function Home() {
   useEffect(() => {
     async function fetch() {
       const localPlaylists = await localApi.getPlaylists();
-      const trackIds = localPlaylists.map(playlist =>
+      const trackIdsByPlaylist = localPlaylists.map(playlist =>
         playlist.tracks.map(track => track.spotify_id)
       );
-      const requests = trackIds.map(ids => spotifyApi.tracks.getTracks(ids));
-      const tracks = await Promise.all(requests);
+      const requests = trackIdsByPlaylist.map(ids =>
+        spotifyApi.tracks.getTracks(ids)
+      );
+      const tracksByPlaylist = await Promise.all(requests);
       const playlists = localPlaylists.map((playlist, index) => ({
         ...playlist,
-        ...tracks[index].track,
+        tracks: mergePlaylistTracks(playlist.tracks, tracksByPlaylist[index]),
       }));
+      console.log(playlists);
       setPlaylists(playlists);
       setLoading(false);
     }

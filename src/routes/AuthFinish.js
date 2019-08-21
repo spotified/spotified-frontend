@@ -1,25 +1,23 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 
 import { AuthContext } from '../contexts/AuthContext';
 
-let finishing = false;
-
 export const AuthFinish = ({ location, navigate }) => {
   const auth = useContext(AuthContext);
+  const isFinishing = useRef(false);
 
   useEffect(() => {
     async function finishAuth() {
-      finishing = true;
+      isFinishing.current = true;
       const query = new URLSearchParams(location.search);
       const code = query.get('code');
-      console.log('finishing');
       await auth.logInFinish(code);
       navigate('/');
     }
-    if (!finishing) {
+    if (!isFinishing.current) {
       finishAuth();
     }
-  }, [location, auth, navigate]);
+  }, [location, navigate, auth]);
 
   return null;
 };
