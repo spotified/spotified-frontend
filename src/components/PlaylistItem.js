@@ -3,13 +3,9 @@ import { FiMusic, FiTag } from 'react-icons/fi';
 import classnames from 'classnames';
 
 import css from './PlaylistItem.module.css';
-import { upvoteTrack, downvoteTrack } from '../api/local/tracks/voteTrack';
 
-export function PlaylistItem({ playlist }) {
+export function PlaylistItem({ playlist, onUpvote, onDownvote }) {
   const [isOpen, setOpen] = useState(false);
-
-  const onLike = trackId => () => upvoteTrack(playlist.pk, trackId);
-  const onDislike = trackId => () => downvoteTrack(playlist.pk, trackId);
 
   const toggleOpen = () => setOpen(!isOpen);
 
@@ -33,13 +29,19 @@ export function PlaylistItem({ playlist }) {
             ? 'No tracks'
             : playlist.tracks.map(track => (
                 <li key={track.id}>
-                  <button onClick={onLike(track.pk)} className={css.button}>
+                  <button
+                    onClick={onUpvote(playlist.pk, track.pk)}
+                    className={css.button}
+                  >
                     <span role="img" aria-label="Likes">
                       ❤️
                     </span>
                   </button>{' '}
                   {track.votes.ups}{' '}
-                  <button onClick={onDislike(track.pk)} className={css.button}>
+                  <button
+                    onClick={onDownvote(playlist.pk, track.pk)}
+                    className={css.button}
+                  >
                     <span role="img" aria-label="Dislikes">
                       😩
                     </span>

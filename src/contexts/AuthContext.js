@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
 import { localApi } from '../api/local';
+import { setLocalAuthorizationToken } from '../api/local/config';
 import { spotifyApi } from '../api/spotify';
-import { setAuthorizationHeaderToken } from '../api/spotify/config';
+import { setSpotifyAuthorizationToken } from '../api/spotify/config';
 
 export const AuthContext = React.createContext({
   user: null,
@@ -26,8 +27,11 @@ export function AuthProvider({ children }) {
         },
         logInFinish: async code => {
           setLoggingIn(true);
+
           const token = await localApi.getToken(code);
-          setAuthorizationHeaderToken(token);
+          setSpotifyAuthorizationToken(token);
+          setLocalAuthorizationToken(token);
+
           const userData = await spotifyApi.user.getCurrentUser();
           setLoggingIn(false);
           setUser({
