@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { upvoteTrack, downvoteTrack } from '../api/local/tracks/voteTrack';
-import { updatePlaylistVote } from '../services/updatePlaylistVote';
+import { updatePlaylistVote, UP, DOWN } from '../services/updatePlaylistVote';
 import { getPlaylistsWithTracks } from '../services/getPlaylistsWithTracks';
 import { PlaylistItem } from '../components/PlaylistItem';
 
@@ -20,11 +20,11 @@ export function Home() {
 
   const onUpvote = (playlistId, trackId) => () => {
     upvoteTrack(playlistId, trackId);
-    setPlaylists(updatePlaylistVote(playlists, playlistId, trackId, 'up'));
+    setPlaylists(updatePlaylistVote(playlists, playlistId, trackId, UP));
   };
   const onDownvote = (playlistId, trackId) => () => {
     downvoteTrack(playlistId, trackId);
-    setPlaylists(updatePlaylistVote(playlists, playlistId, trackId, 'down'));
+    setPlaylists(updatePlaylistVote(playlists, playlistId, trackId, DOWN));
   };
 
   if (isLoading) {

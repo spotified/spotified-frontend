@@ -1,4 +1,7 @@
-export const updatePlaylistVote = (playlists, playlistId, trackId, isUpvote) =>
+export const UP = 'ups';
+export const DOWN = 'downs';
+
+export const updatePlaylistVote = (playlists, playlistId, trackId, upOrDown) =>
   playlists.map(playlist => {
     if (playlist.pk !== playlistId) {
       return playlist;
@@ -9,7 +12,6 @@ export const updatePlaylistVote = (playlists, playlistId, trackId, isUpvote) =>
         if (track.pk !== trackId) {
           return track;
         }
-        const upOrDown = isUpvote ? 'ups' : 'downs';
         return {
           ...track,
           votes: {
